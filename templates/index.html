@@ -9,7 +9,54 @@
     </style>
 </head>
 <body>
-    <canvas id="timeline-canvas"></canvas>
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <input type="file" id="file-input" accept=".md" style="margin: 20px;">
+  <canvas id="timeline-canvas"></canvas>
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <script>
+    // 加载表列表
+    async function loadTables() {
+      const response = await fetch('/api/tables');
+      const tables = await response.json();
+      const select = document.getElementById('table-select');
+      tables.forEach(table => {
+        const option = document.createElement('option');
+        option.value = table;
+        option.textContent = table;
+        select.appendChild(option);
+      });
+    }
+
+    // 加载列信息
+    async function loadColumns(table) {
+      const timeSelect = document.getElementById('time-column');
+      const typeSelect = document.getElementById('event-type-column');
+      
+      // 清空现有选项
+      timeSelect.innerHTML = '<option value="">选择时间列</option>';
+      typeSelect.innerHTML = '<option value="">选择事件类型列</option>';
+
+      if (!table) return;
+
+      const response = await fetch(`/api/columns/${table}`);
+      const columns = await response.json();
+      columns.forEach(col => {
+        const option = document.createElement('option');
+        option.value = col.name;
+        option.textContent = `${col.name} (${col.type})`;
+        
+        timeSelect.appendChild(option.cloneNode(true));
+        typeSelect.appendChild(option);
+      });
+    }
+
+    // 应用配置
+    async function applyConfig() {
+      // 重新加载时间轴
+      window.location.reload();
+    }
+
+    // 初始化
+    loadTables();
+  </script>
 </body>
 </html>
