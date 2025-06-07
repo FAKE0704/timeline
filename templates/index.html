@@ -1,29 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>时间轴可视化</title>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline App</title>
 </head>
 <body>
-  <div class="control-panel" style="margin: 20px;">
-    <input type="file" id="file-input" accept=".md">
-<button id="generate-btn">生成时间轴</button>
-<button id="center-btn" style="margin-left:10px;">回到中心</button>
-    
-    <div id="preview-area" style="margin-top:10px; padding:10px; border:1px solid #ccc; max-height:200px; overflow:auto;">
-      <h4 style="margin:0 0 5px 0;">文件预览：</h4>
-<pre id="preview-content" style="white-space: pre-wrap; margin:0;"></pre>
-    </div>
-  </div>
-  <canvas id="timeline-canvas"></canvas>
-  <script src="{{ url_for('static', filename='main.js') }}"></script>
-  <script>
-    // 初始化
-    console.log('页面初始化完成');
-  </script>
+  <div id="root"></div>
 </body>
 </html>

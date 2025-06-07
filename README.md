@@ -82,6 +82,19 @@ C:\Users\Thomas P Gao\Documents\personal\VSC\timeline
 • **坐标系计算**：动态转换时间戳与像素位置，处理多时区适配  
 • **事件分发器**：统一管理拖拽、滚轮、点击等交互事件  
 
+
+### 必要的React组件文件：
+
+- TimelineContext.js (状态管理)
+- TimelineApp.jsx (主组件：状态管理、组合控制面板和画布组件)
+- ControlPanel.jsx (控制面板：所有用户交互控件、布局)
+- TimelineCanvas.jsx (文件上传组件)
+- 操作按钮组
+- 预览面板
+- 画布组件
+- 坐标系组件
+- 其他子组件
+
 ## **4.2 附件管理模块**
 • **预览组件**：集成PDF.js、Video.js等实现多格式预览  
 • **元数据索引**：通过Elasticsearch实现附件内容全文检索  
