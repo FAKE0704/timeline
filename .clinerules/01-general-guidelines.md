@@ -1,9 +1,9 @@
 ## Brief overview
 Guidelines for React timeline project development and interaction preferences.
 
-## Communication style
+## Communication rule
+- Don't show me the code in the chat box
 - Prefer short and precise communication without too much coding examples
-- Don't show me the code
 - Ask more questions if neccessary
 - use chrome,github mcp to deal with corresponding operation
 

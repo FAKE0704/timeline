@@ -8,6 +8,7 @@ export const TimelineProvider = ({ children }) => {
   const [fileContent, setFileContent] = useState('');
   const [isRendering, setIsRendering] = useState(false);
   const [needsRedraw, setNeedsRedraw] = useState(true);
+  const [scale, setScale] = useState(1.0);
 
   const parseMarkdown = (content) => {
     const events = [];
@@ -71,7 +72,9 @@ export const TimelineProvider = ({ children }) => {
         setIsRendering,
         needsRedraw,
         setNeedsRedraw,
-        parseMarkdown
+        parseMarkdown,
+        scale,
+        setScale
       }}
     >
       {children}

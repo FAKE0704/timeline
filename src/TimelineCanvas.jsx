@@ -3,7 +3,7 @@ import { useTimeline } from './TimelineContext';
 
 const TimelineCanvas = () => {
   const canvasRef = useRef(null);
-  const { timelineData, yOffset } = useTimeline();
+  const { timelineData, yOffset, scale, setScale } = useTimeline();
   const animationFrameId = useRef(null);
 
   const render = useCallback(() => {
@@ -22,8 +22,9 @@ const TimelineCanvas = () => {
 
     // Draw timeline arrow (always visible)
     const margin = 50;
-    const firstX = margin;
-    const lastX = canvas.width - margin;
+    const timelineLength = (canvas.width - 2 * margin) * scale;
+    const firstX = (canvas.width - timelineLength) / 2;
+    const lastX = firstX + timelineLength;
     const lineY = canvas.height / 2 + yOffset + 30;
 
     // Arrow line
@@ -44,48 +45,59 @@ const TimelineCanvas = () => {
     ctx.fill();
 
     // Draw timeline data
-    timelineData.forEach((event, index) => {
-      ctx.fillStyle = 'blue';
-      ctx.beginPath();
-      ctx.arc(100 + index * 60, canvas.height / 2 + yOffset, 5, 0, 2 * Math.PI);
-      ctx.fill();
-      
-      ctx.fillStyle = 'black';
-      ctx.font = '12px Arial';
-      ctx.fillText(event.title, 75 + index * 60, canvas.height / 2 + yOffset + 20);
-    });
-  }, [timelineData, yOffset]);
+    if (timelineData.length > 0) {
+      const sortedEvents = [...timelineData].sort((a, b) => a.timestamp - b.timestamp);
+      const minTime = sortedEvents[0].timestamp;
+      const maxTime = sortedEvents[sortedEvents.length - 1].timestamp;
+      const totalDuration = maxTime - minTime;
+
+      sortedEvents.forEach(event => {
+        const position = totalDuration > 0 ? (event.timestamp - minTime) / totalDuration : 0.5;
+        const x = firstX + position * (lastX - firstX);
+        
+        // Draw event point on timeline
+        ctx.fillStyle = 'blue';
+        ctx.beginPath();
+        ctx.arc(x, lineY, 8, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Draw event info
+        ctx.fillStyle = 'black';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(event.title, x, lineY + 30);
+        ctx.fillText(event.date, x, lineY + 50);
+      });
+    }
+  }, [timelineData, yOffset, scale]);
 
   useEffect(() => {
     console.log('Setting up canvas and initial render');
     const canvas = canvasRef.current;
-    if (!canvas) {
-      console.error('Canvas ref not available');
+    const container = canvas.parentElement;
+    
+    if (!canvas || !container) {
+      console.error('Canvas or container ref not available');
       return;
     }
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    console.log('Canvas dimensions set:', canvas.width, canvas.height);
-
-    const handleResize = () => {
-      console.log('Window resized - updating canvas');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-      animationFrameId.current = requestAnimationFrame(render);
+    const updateCanvasSize = () => {
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
+      console.log('Canvas dimensions set:', canvas.width, canvas.height);
+      render();
     };
 
-    window.addEventListener('resize', handleResize);
+    const resizeObserver = new ResizeObserver(() => {
+      updateCanvasSize();
+    });
+    resizeObserver.observe(container);
 
-    // Immediate initial render
-    console.log('Triggering initial render');
-    render();
+    // Initial size setup
+    updateCanvasSize();
     
     return () => {
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
@@ -100,11 +112,18 @@ const TimelineCanvas = () => {
     animationFrameId.current = requestAnimationFrame(render);
   }, [timelineData, yOffset, render]);
 
+  const handleWheel = useCallback((e) => {
+    e.preventDefault();
+    const zoomDirection = e.deltaY > 0 ? -0.1 : 0.1;
+    setScale(prev => Math.max(0.5, Math.min(3.0, prev + zoomDirection)));
+  }, [setScale]);
+
   return (
     <canvas 
       ref={canvasRef}
       id="timeline-canvas"
       style={{ display: 'block' }}
+      onWheel={handleWheel}
     />
   );
 };
