@@ -56,6 +56,7 @@
 ---
 
 # **4. 文件结构**
+```
 timeline/
 ├── src/                      # 前端源代码
 │   ├── index.css             # 全局样式
@@ -76,7 +77,7 @@ timeline/
 ├── README.md                 # 项目说明文档
 ├── requirements.txt          # Python 依赖
 └── webpack.config.js         # Webpack 配置文件
-
+```
 ---
 
 # **5. 开发与运行**
