@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTimeline } from './TimelineContext';
 
 const ActionButtons = () => {
@@ -31,13 +31,21 @@ const ActionButtons = () => {
     return events;
   };
 
-  const handleGenerate = () => {
-    if (!fileContent) {
-      alert('请先选择时间轴数据文件');
-      return;
+  // Automatically generate timeline on mount and when file content changes
+  useEffect(() => {
+    let content = fileContent;
+    if (!content) {
+      // Use default content if no file is uploaded
+      content = `
+2025-01-01: Project Kick-off
+2025-01-15: Initial Design Complete
+2025-02-01: Development Sprint 1 Starts
+2025-02-15: Sprint 1 Ends, Review
+2025-03-01: Sprint 2 Starts
+      `.trim();
     }
-    setTimelineData(parseMarkdown(fileContent));
-  };
+    setTimelineData(parseMarkdown(content));
+  }, [fileContent, setTimelineData]);
 
   const handleMoveDown = () => {
     setYOffset(yOffset + 100);
@@ -49,9 +57,7 @@ const ActionButtons = () => {
 
   return (
     <div className="action-buttons" style={{ marginTop: '10px' }}>
-      <button id="generate-btn" onClick={handleGenerate}>
-        生成时间轴
-      </button>
+      {/* Generate button removed - timeline now shows automatically */}
       <button 
         id="move-down-btn" 
         style={{ marginLeft: '10px' }}

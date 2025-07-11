@@ -8,7 +8,9 @@ const TimelineApp = () => {
     <TimelineProvider>
       <div className="timeline-app">
         <ControlPanel />
-        <TimelineCanvas />
+        <div className="timeline-display-container">
+          <TimelineCanvas />
+        </div>
       </div>
     </TimelineProvider>
   );

@@ -9,15 +9,11 @@ module.exports = {
     publicPath: '/static/'
   },
   devServer: {
-    static: {
-      directory: path.join(__dirname, 'templates'),
-    },
+    static: false, //不再需要
     compress: true,
     port: 8080,
     hot: true,
-    historyApiFallback: {
-      index: 'index.html'
-    }
+    historyApiFallback: true
   },
   module: {
     rules: [
