@@ -3,6 +3,7 @@
   padding: 20px;
   background-color: #f5f5f5;
   min-height: 100vh;
+  overflow: hidden; /* Prevent page scrolling */
 }
 
 .timeline-app h1 {
@@ -17,10 +18,24 @@
   width: 100vw;
   height: 100vh;
   background-color: white;
-  overflow: hidden;
+  overflow: auto; /* Allow scrolling within timeline only */
   padding: 0;
   margin: 0;
-  z-index: 1;   /*放在下层*/
+  z-index: 1;
+}
+
+.control-panel-container {
+  position: relative;
+  z-index: 2;
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  pointer-events: none;
+}
+
+.control-panel-container > * {
+  pointer-events: auto;
 }
 
 .file-uploader {

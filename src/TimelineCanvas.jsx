@@ -88,16 +88,24 @@ const TimelineCanvas = () => {
       render();
     };
 
+    const handleContainerWheel = (e) => {
+      e.preventDefault();
+    };
+
     const resizeObserver = new ResizeObserver(() => {
       updateCanvasSize();
     });
     resizeObserver.observe(container);
+
+    // Prevent wheel events on container
+    container.addEventListener('wheel', handleContainerWheel, { passive: false });
 
     // Initial size setup
     updateCanvasSize();
     
     return () => {
       resizeObserver.disconnect();
+      container.removeEventListener('wheel', handleContainerWheel);
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }

@@ -5,7 +5,7 @@ import PreviewPanel from './PreviewPanel';
 
 const ControlPanel = () => {
   return (
-    <div className="control-panel" style={{ margin: '20px' }}>
+    <div className="control-panel-container" style={{ margin: '20px' }}>
       <FileUploader />
       <ActionButtons />
       <PreviewPanel />
